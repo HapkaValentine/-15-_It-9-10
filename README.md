@@ -5,6 +5,6 @@
 
 ## Установка и Запуск
 ```bash
-git clone https://github.com/your-team/fifteen-puzzle.git
-cd fifteen-puzzle
+git clone https://github.com/HapkaValentine/-15-_It-9-10
+cd 15-_It-9-10
 python main.py
