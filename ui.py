@@ -1,77 +1,62 @@
 import os
 from game import Game15
 class GameUI:
-    def __init__(self, game: Game15):
-        self.game = game
-
-    def clear_screen(self) -> None:
-        """Очистка экрана консоли"""
-        os.system('cls' if os.name == 'nt' else 'clear')
-
-    def display_board(self) -> None:
-        """Отображение игрового поля"""
-        board = self.game.get_board()
-
-        print("\n" + "=" * 25)
-        print("    ПЯТНАШКИ")
-        print("=" * 25)
-        print(f"Ходов сделано: {self.game.get_moves_count()}")
+    def __init__(self, game):
+        self.g = game
+        self.tmp = 0
+    def ochistit_ekran(self):
+        kom = "cls"
+        if os.name != "nt":
+            kom = "clear"
+        os.system(kom)
+    def pokazat_pole(self):
+        p = self.g.poluchit_pole()
+        print("\n=======================")
+        print("     ИГРА 15 (v1)")
+        print("=======================")
+        print("Ходы сделаны:", self.g.poluchit_schetchik_hodov())
         print()
-
-        for i in range(len(board)):
+        for i in range(len(p)):
             print("  +----+----+----+----+")
-            print("  |", end="")
-            for j in range(len(board[i])):
-                if board[i][j] == 0:
-                    print("    |", end="")
+            stroka = "  |"
+            for j in range(len(p[i])):
+                zn = p[i][j]
+                if zn == 0:
+                    stroka += "    |"
                 else:
-                    print(f" {board[i][j]:2} |", end="")
-            print()
+                    stroka += (" " + str(zn).rjust(2, " ") + " |")
+            print(stroka)
         print("  +----+----+----+----+")
         print()
-
-    def display_controls(self) -> None:
-        """Отображение управления"""
+    def pokazat_upravlenie(self):
         print("Управление:")
-        print("  W - Вверх")
-        print("  S - Вниз")
-        print("  A - Влево")
-        print("  D - Вправо")
-        print("  R - Перезапуск")
-        print("  0 - Выход")
+        print(" W - вверх")
+        print(" S - вниз")
+        print(" A - влево")
+        print(" D - вправо")
+        print(" R - рестарт")
+        print(" 0 - выход")
         print()
-    def get_move(self) -> str:
-        """Получение хода от пользователя"""
-        while True:
-            move = input("Ваш ход (W/A/S/D): ").strip().lower()
+    def poluchit_hod(self):
+        h = input("Введите ход: ").strip().lower()
+        while h not in ["w", "a", "s", "d", "r", "0"]:
+            print("Ошибка. Попробуйте снова.")
+            h = input("Введите ход: ").strip().lower()
+        return h
 
-            if move in ['w', 'a', 's', 'd', 'r', '0']:
-                return move
-            else:
-                print("Неверный ввод! Используйте W, A, S, D, R или 0")
-
-    def convert_input(self, move: str) -> str:
-        """Конвертация ввода пользователя в направление"""
-        conversion = {
-            'w': 'up',
-            's': 'down',
-            'a': 'left',
-            'd': 'right'
-        }
-        return conversion.get(move, move)
-
-    def show_message(self, message: str) -> None:
-        """Отображение сообщения"""
-        print(f"\n{message}")
-
-    def show_victory(self) -> None:
-        """Отображение сообщения о победе"""
-        moves = self.game.get_moves_count()
-        print("\n" + "=" * 40)
-        print("🎉 ПОЗДРАВЛЯЮ! ВЫ РЕШИЛИ ГОЛОВОЛОМКУ! 🎉")
-        print(f"Количество ходов: {moves}")
-        print("=" * 40)
-
-    def show_invalid_move(self) -> None:
-        """Отображение сообщения о недопустимом ходе"""
-        print("Невозможно сделать этот ход! Попробуйте другой.")
+    def perevesti_napravlenie(self, h):
+        nap = {"w": "verh", "s": "niz", "a": "levo", "d": "pravo"}
+        if h in nap:
+            return nap[h]
+        else:
+            return h
+    def pokazat_soobshenie(self, t):
+        print("\n" + str(t))
+    def pokazat_pobedu(self):
+        kol = self.g.poluchit_schetchik_hodov()
+        print("\n===================================")
+        print("          ПОБЕДА !!!")
+        print("Вы сделали ходов:", kol)
+        print("===================================")
+    def pokazat_oshibku(self):
+        print("Так ходить нельзя (я сам пробовал).")

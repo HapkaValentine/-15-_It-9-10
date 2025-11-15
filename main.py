@@ -1,51 +1,44 @@
 from game import Game15
 from ui import GameUI
 
-
 def main():
-    # Инициализация игры и интерфейса
-    game = Game15()
-    ui = GameUI(game)
-
-    print("Добро пожаловать в игру 'Пятнашки'!")
-    print("Перемещайте плитки, чтобы упорядочить числа от 1 до 15.")
-
-    # Перемешивание поля
-    game.shuffle(50)
-
-    # Главный игровой цикл
-    while True:
-        ui.clear_screen()
-        ui.display_board()
-        ui.display_controls()
-
-        # Проверка победы
-        if game.is_solved():
-            ui.show_victory()
+    g = Game15()
+    interface = GameUI(g)
+    print("Добро пожаловать в игру Пятнашки!")
+    print("Нужно собрать числа в правильном порядке.")
+    print("Если что, можно перезапустить игру буквой r.")
+    shuffle_times = 50
+    g.peremeshat(shuffle_times)
+    is_running = True
+    while is_running:
+        interface.ochistit_ekran()
+        interface.pokazat_pole()
+        interface.pokazat_upravlenie()
+        if g.proverit_pobedu():
+            interface.pokazat_pobedu()
+            is_running = False
+            input("Нажмите Enter чтобы выйти...")
             break
-
-        # Получение хода от пользователя
-        move = ui.get_move()
-
-        # Обработка специальных команд
-        if move == '0':
-            print("Спасибо за игру!")
+        player_input = interface.poluchit_hod()
+        if player_input == "0":
+            print("Выход из игры. Пока!")
             break
-        elif move == 'r':
-            game.reset_game()
-            game.shuffle(50)
-            ui.show_message("Игра перезапущена!")
+        if player_input == "r":
+            g.nachalo()
+            g.peremeshat(50)
+            interface.pokazat_soobshenie("Перезапуск выполнен!")
+            input("Enter...")
             continue
-
-        # Выполнение хода
-        direction = ui.convert_input(move)
-        if game.move(direction):
-            ui.show_message(f"Ход выполнен: {direction}")
+        move_dir = interface.perevesti_napravlenie(player_input)
+        if move_dir is None:
+            print("Непонятно что вы ввели...")
+            input("Enter...")
+            continue
+        moved = g.hodit(move_dir)
+        if moved:
+            interface.pokazat_soobshenie("Ход сделан: " + move_dir)
         else:
-            ui.show_invalid_move()
-
-        input("Нажмите Enter для продолжения...")
-
-
+            interface.pokazat_oshibku()
+        tmp = input("Нажмите Enter...")
 if __name__ == "__main__":
     main()
