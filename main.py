@@ -2,32 +2,33 @@ from game import Game15
 from ui import GameUI
 
 def main():
-    igra = Game15()
-    interfeis = GameUI(igra)
+    game = Game15()
+    ui = GameUI(game)
     print("Привет! Это игра 'Пятнашки'!")
     print("Расставьте числа по порядку от 1 до 15.")
-    igra.peremeshat(50)
+    game.shuffle(50)
     while True:
-        interfeis.ochistit_ekran()
-        interfeis.pokazat_pole()
-        interfeis.pokazat_upravlenie()
-        if igra.proverit_pobedu():
-            interfeis.pokazat_pobedu()
+        ui.clear_screen()
+        ui.show_board()
+        ui.show_controls()
+
+        if game.check_win():
+            ui.show_win()
             break
-        vvod_hoda = interfeis.poluchit_hod()
-        if vvod_hoda == '0':
+        move = ui.get_move()
+        if move == '0':
             print("Пока!")
             break
-        elif vvod_hoda == 'r':
-            igra.nachalo()
-            igra.peremeshat(50)
-            interfeis.pokazat_soobshenie("Начинаем заново!")
+        elif move == 'r':
+            game.reset()
+            game.shuffle(50)
+            ui.show_message("Начинаем заново!")
             continue
-        napravlenie = interfeis.perevesti_napravlenie(vvod_hoda)
-        if igra.hodit(napravlenie):
-            interfeis.pokazat_soobshenie(f"Пошли: {napravlenie}")
+        direction = ui.translate_direction(move)
+        if game.move(direction):
+            ui.show_message(f"Пошли: {direction}")
         else:
-            interfeis.pokazat_oshibku()
+            ui.show_error()
         input("Жми Enter чтобы дальше...")
 if __name__ == "__main__":
     main()
