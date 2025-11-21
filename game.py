@@ -1,80 +1,71 @@
 import random
+
 class Game15:
     def __init__(self):
-        self.razmer = 4
-        self.pole = []
-        self.pustaya_poziciya = (3, 3)
-        self.schetchik_hodov = 0
-        self.nachalo()
-    def nachalo(self):
-        self.pole = []
-        chislo = 1
-        for i in range(self.razmer):
-            ryad = []
-            for j in range(self.razmer):
-                if i == self.razmer - 1 and j == self.razmer - 1:
-                    ryad.append(0)
-                else:
-                    ryad.append(chislo)
-                    chislo += 1
-            self.pole.append(ryad)
-        self.pustaya_poziciya = (self.razmer - 1, self.razmer - 1)
-        self.schetchik_hodov = 0
-    def peremeshat(self, skolko=1000):
-        napravleniya = ['verh', 'niz', 'levo', 'pravo']
-        for _ in range(skolko):
-            kuda = random.choice(napravleniya)
-            self.hodit(kuda)
-    def hodit(self, kuda):
-        x, y = self.pustaya_poziciya
-        if kuda == 'verh' and x > 0:
-            self.pole[x][y], self.pole[x - 1][y] = self.pole[x - 1][y], self.pole[x][y]
-            self.pustaya_poziciya = (x - 1, y)
-            self.schetchik_hodov += 1
-            return True
-        elif kuda == 'niz' and x < self.razmer - 1:
-            self.pole[x][y], self.pole[x + 1][y] = self.pole[x + 1][y], self.pole[x][y]
-            self.pustaya_poziciya = (x + 1, y)
-            self.schetchik_hodov += 1
-            return True
-        elif kuda == 'levo' and y > 0:
-            self.pole[x][y], self.pole[x][y - 1] = self.pole[x][y - 1], self.pole[x][y]
-            self.pustaya_poziciya = (x, y - 1)
-            self.schetchik_hodov += 1
-            return True
-        elif kuda == 'pravo' and y < self.razmer - 1:
-            self.pole[x][y], self.pole[x][y + 1] = self.pole[x][y + 1], self.pole[x][y]
-            self.pustaya_poziciya = (x, y + 1)
-            self.schetchik_hodov += 1
-            return True
-        return False
-    def proverit_pobedu(self):
-        dolzhno_bit = 1
-        for i in range(self.razmer):
-            for j in range(self.razmer):
-                if i == self.razmer - 1 and j == self.razmer - 1:
-                    if self.pole[i][j] != 0:
-                        return False
-                else:
-                    if self.pole[i][j] != dolzhno_bit:
-                        return False
-                    dolzhno_bit += 1
-        return True
-    def poluchit_pole(self):
-        return self.pole
-    def poluchit_pustuyu_poziciyu(self):
-        return self.pustaya_poziciya
-    def poluchit_schetchik_hodov(self):
-        return self.schetchik_hodov
-    def mozhno_hodit(self, kuda):
-        x, y = self.pustaya_poziciya
-        if kuda == 'verh' and x > 0:
-            return True
-        elif kuda == 'niz' and x < self.razmer - 1:
-            return True
-        elif kuda == 'levo' and y > 0:
-            return True
-        elif kuda == 'pravo' and y < self.razmer - 1:
-            return True
+        self.size = 4
+        self.board = []
+        self.empty_pos = (3, 3)
+        self.moves_count = 0
+        self.reset()
 
-        return False
+    def reset(self):
+        self.board = []
+        num = 1
+        for i in range(self.size):
+            row = []
+            for j in range(self.size):
+                if i == self.size - 1 and j == self.size - 1:
+                    row.append(0)
+                else:
+                    row.append(num)
+                    num += 1
+            self.board.append(row)
+        
+        self.empty_pos = (self.size - 1, self.size - 1)
+        self.moves_count = 0
+
+    def shuffle(self, count=1000):
+        directions = ['up', 'down', 'left', 'right']
+        for _ in range(count):
+            direction = random.choice(directions)
+            self.move(direction)
+
+    def move(self, direction):
+        x, y = self.empty_pos
+        new_x, new_y = x, y
+        if direction == 'up' and x > 0:
+            new_x = x - 1
+        elif direction == 'down' and x < self.size - 1:
+            new_x = x + 1
+        elif direction == 'left' and y > 0:
+            new_y = y - 1
+        elif direction == 'right' and y < self.size - 1:
+            new_y = y + 1
+        else:
+            return False
+        self.board[x][y], self.board[new_x][new_y] = self.board[new_x][new_y], self.board[x][y]
+        self.empty_pos = (new_x, new_y)
+        self.moves_count += 1
+        return True
+
+    def check_win(self):
+        expected = 1
+        for i in range(self.size):
+            for j in range(self.size):
+                if i == self.size - 1 and j == self.size - 1:
+                    if self.board[i][j] != 0:
+                        return False
+                else:
+                    if self.board[i][j] != expected:
+                        return False
+                    expected += 1
+        return True
+
+    def get_board(self):
+        return self.board
+
+    def get_empty_pos(self):
+        return self.empty_pos
+
+    def get_moves_count(self):
+        return self.moves_count

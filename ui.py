@@ -1,30 +1,34 @@
 import os
-from game import Game15
 
 class GameUI:
     def __init__(self, game):
-        self.igra = game
-    def ochistit_ekran(self):
+        self.game = game
+
+    def clear_screen(self):
         os.system('cls' if os.name == 'nt' else 'clear')
-    def pokazat_pole(self):
-        pole = self.igra.poluchit_pole()
+
+    def show_board(self):
+        board = self.game.get_board()
+
         print("\n" + "=" * 25)
         print("    ПЯТНАШКИ")
         print("=" * 25)
-        print(f"Сделано ходов: {self.igra.poluchit_schetchik_hodov()}")
+        print(f"Сделано ходов: {self.game.get_moves_count()}")
         print()
-        for i in range(len(pole)):
+
+        for i in range(len(board)):
             print("  +----+----+----+----+")
             print("  |", end="")
-            for j in range(len(pole[i])):
-                if pole[i][j] == 0:
+            for j in range(len(board[i])):
+                if board[i][j] == 0:
                     print("    |", end="")
                 else:
-                    print(f" {pole[i][j]:2} |", end="")
+                    print(f" {board[i][j]:2} |", end="")
             print()
         print("  +----+----+----+----+")
         print()
-    def pokazat_upravlenie(self):
+
+    def show_controls(self):
         print("Управление:")
         print("  W - Вверх")
         print("  S - Вниз")
@@ -33,29 +37,32 @@ class GameUI:
         print("  R - Заново")
         print("  0 - Выйти")
         print()
-    def poluchit_hod(self):
-        while True:
-            vvod = input("Ваш ход (W/A/S/D): ").strip().lower()
 
-            if vvod in ['w', 'a', 's', 'd', 'r', '0']:
-                return vvod
+    def get_move(self):
+        while True:
+            move = input("Ваш ход (W/A/S/D): ").strip().lower()
+            
+            if move in ['w', 'a', 's', 'd', 'r', '0']:
+                return move
             else:
                 print("Неправильно! Надо W, A, S, D, R или 0")
-    def perevesti_napravlenie(self, vvod):
-        slovar = {
-            'w': 'verh',
-            's': 'niz',
-            'a': 'levo',
-            'd': 'pravo'
-        }
-        return slovar.get(vvod, vvod)
-    def pokazat_soobshenie(self, text):
+
+    def translate_direction(self, move):
+        if move == 'w': return 'up'
+        if move == 's': return 'down'
+        if move == 'a': return 'left'
+        if move == 'd': return 'right'
+        return move
+
+    def show_message(self, text):
         print(f"\n{text}")
-    def pokazat_pobedu(self):
-        hodi = self.igra.poluchit_schetchik_hodov()
+
+    def show_win(self):
+        moves = self.game.get_moves_count()
         print("\n" + "=" * 40)
         print("УРА! ВЫ ВЫИГРАЛИ!")
-        print(f"Всего ходов: {hodi}")
+        print(f"Всего ходов: {moves}")
         print("=" * 40)
-    def pokazat_oshibku(self):
+
+    def show_error(self):
         print("Так нельзя ходить! Попробуйте по-другому.")
