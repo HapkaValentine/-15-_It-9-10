@@ -3,12 +3,12 @@
 ## Описание
 Классическая головоломка "Пятнашки". Игровое поле 4x4 содержит 15 пронумерованных плиток и одну пустую клетку. Цель - упорядочить плитки по возрастанию, перемещая их на пустое место.
 ## Участники и Роли
-* **Еловиков Виктор** ([@github-HapkaValentine](https://github.com/HapkaValentine)): Архитектор проекта, создание репозитория, разработка базовой структуры и документации (README.md).
-* **Дубровских Александр** ([@github-lolocaha](https://github.com/lolocaha)): Разработка игровой логики (модуль `game.py`): перемещение плиток, проверка победы, перемешивание поля.
-* **Захаров Михаил** ([@github-mihuila1](https://github.com/mihuila1)): Разработка пользовательского интерфейса (модули `ui.py`, `main.py`), тестирование, создание презентации.
+* **Еловиков Виктор** ([@github-HapkaValentine](https://github.com/HapkaValentine)): Написание кода
+* **Дубовских Александр** ([@github-lolocaha](https://github.com/lolocaha)): Отчет
+* **Захаров Михаил** ([@github-mihuila1](https://github.com/mihuila1)): Презентация
 
 ## Установка и Запуск
 ```bash
 git clone https://github.com/HapkaValentine/-15-_It-9-10
 cd 15-_It-9-10
-python main.py
+python igrav15.py
