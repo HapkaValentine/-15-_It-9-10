@@ -10,5 +10,5 @@
 ## Установка и Запуск
 ```bash
 git clone https://github.com/HapkaValentine/-15-_It-9-10
-cd 15-_It-9-10
+cd ./-15-_It-9-10
 python igrav15.py
